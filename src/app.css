@@ -1,0 +1,94 @@
+:root {
+	--disabled: rgb(160, 160, 160);
+	--border: rgb(104,1,145);
+	--tcol: rgb(255, 255, 255);
+	--border-width: 3px;
+	font-size: 30px;
+	font-family: sans-serif;
+}
+
+body {
+	height: 100vh;
+	width: 100vw;
+	display: flex;
+	margin: 0px;
+	background: rgb(66, 66, 66);
+	background: linear-gradient(160deg, rgb(66, 66, 66) 0%, rgb(61, 61, 61) 30%, rgb(42, 42, 42) 30%, rgb(52, 52, 52) 70%, rgb(66, 66, 66) 70%, rgb(68, 68, 68) 100%);
+	/* https://stackoverflow.com/a/4407335 */
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+
+input {
+	font-size: inherit;
+	text-align: center;
+	background-color: transparent;
+	color: inherit ;
+	-khtml-user-select: text;
+	-moz-user-select: text;
+	-ms-user-select: text;
+	-webkit-user-select: text;
+	user-select: text;
+}
+
+button {
+	cursor: pointer;
+	z-index: 1;
+	font-size: inherit;
+	text-align: center;
+	height: fit-content;
+	width: fit-content;
+	padding: 8px 25px 8px 25px;
+	background: transparent;
+	color: var(--tcol);
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+input::selection {
+	background-color: rgba(209, 209, 209, 0.87);
+}
+
+input:focus,
+select:focus,
+select option:focus {
+	outline: none;
+}
+
+button:disabled {
+	color: var(--disabled) !important;
+	border-color: var(--disabled) !important;
+	background-color: transparent !important;
+}
+
+button:hover,
+select:hover {
+	background: var(--border);
+	background: linear-gradient(160deg, var(--border) 50%, rgb(136, 12, 185) 50%);
+	border-color: var(--border);
+}
+
+button:active,
+select:active {
+	border-color: var(--tcol);
+	transition: .1s;
+}
+
+span {
+	width: fit-content;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	padding: 0 25px 0 25px;
+}
+
+.border {
+	border: var(--tcol) solid var(--border-width);
+	border-radius: 6px;
+	transition: .3s;
+}

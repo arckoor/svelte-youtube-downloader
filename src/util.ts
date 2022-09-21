@@ -1,10 +1,9 @@
-
-const serverURL = "http://localhost:8080/dl"
+const serverURL = import.meta.env.DEV ? import.meta.env.VITE_LOCALHOST : import.meta.env.VITE_ONLINE_HOST
 
 const options = {
 	method: "GET",
 	headers: {
-		"arckoor-dl-api-key": "abc"
+		"arckoor-dl-api-key": import.meta.env.VITE_ARC_API_KEY
 	}
 }
 
@@ -34,12 +33,19 @@ export async function dl(url: String, format: String) {
 		// Create a new response out of the stream
 		.then((stream) => new Response(stream))
 		.then((res) => res.blob())
+		.catch((error) => console.log(error))
 }
 
 export async function getTitle(url: String) {
 	return await fetch(`${serverURL}/title?url=${url}`, options)
-	.then((res) => res.json())
+	.then((res) => {
+		if (!res.ok) {
+			throw new Error(`dlErr//${res.status}`);
+		}
+		return res.json();
+	})
 	.then((json) => json.title)
+	.catch((error) => error.message)
 }
 
 export async function dlToFile(blob: Blob, title: String, format: String) {
@@ -56,6 +62,12 @@ export async function dlToFile(blob: Blob, title: String, format: String) {
 
 export async function getPlaylistItems(url: String) {
 	return await fetch(`${serverURL}/resolvePlaylist?url=${url}`, options)
-	.then((res) => res.json())
+	.then((res) => {
+		if (!res.ok) {
+			throw new Error(`dlErr//${res.status}`);
+		}
+		return res.json();
+	})
 	.then((json) => json.items)
+	.catch((error) => [error.message])
 }
