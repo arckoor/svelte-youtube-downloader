@@ -182,12 +182,6 @@ async function directDownload(videos: string[]) {
 		justify-content: center;
 	}
 
-	button {
-		margin-left: 2%;
-		margin-right: 2%;
-		max-height: 90px;
-	}
-
 	input {
 		width: 88%;
 		height: 50px;
@@ -220,14 +214,6 @@ async function directDownload(videos: string[]) {
 		background: rgb(92, 92, 92);
 	}
 
-	.buttonContainer {
-		height: 5vh;
-		display: flex;
-		width: 100%;
-		align-items: center;
-		justify-content: center;
-	}
-
 	.ioContainer {
 		width: 100%;
 		display: flex;
@@ -237,15 +223,18 @@ async function directDownload(videos: string[]) {
 		flex-direction: column;
 	}
 
-	.dz {
-		cursor: pointer;
-		height: 33vh;
-		color: inherit;
+	.buttonContainer {
+		height: 5vh;
 		display: flex;
+		width: 100%;
 		align-items: center;
 		justify-content: center;
-		font-size: 55px;
-		transition: 0s;
+	}
+
+	button {
+		margin-left: 2%;
+		margin-right: 2%;
+		max-height: 90px;
 	}
 
 	.errorContainer {
@@ -263,7 +252,8 @@ async function directDownload(videos: string[]) {
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
-	} 
+	}
+	
 	.errAnim {
 		animation: errFade forwards 1s;
 	}
@@ -280,4 +270,14 @@ async function directDownload(videos: string[]) {
 		}
 	}
 
+	.dz {
+		cursor: pointer;
+		height: 33vh;
+		color: inherit;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 55px;
+		transition: 0s;
+	}
 </style>
