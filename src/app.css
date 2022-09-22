@@ -64,6 +64,7 @@ button:disabled {
 	color: var(--disabled) !important;
 	border-color: var(--disabled) !important;
 	background-color: transparent !important;
+	pointer-events: none;
 }
 
 button:hover,
