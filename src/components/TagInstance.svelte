@@ -132,7 +132,7 @@
 			});
 		}
 		writer.addTag();
-		dlToFile(writer.getBlob(), fileName, "mp3")
+		dlToFile(writer.getBlob(), tags.title || fileName, "mp3")
 		if (moreAvailable) triggerNext();
 	}
 
