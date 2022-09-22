@@ -4,7 +4,7 @@
 	import { dlToFile, convertFileToBuffer } from "@/util";
 	import { tIL } from "@/localise";
 	import cover from "@/assets/cover";
-	import noCover from "@/assets/no-cover";
+	import noCover from "@/assets/no-cover.png";
 	import ID3Writer from "browser-id3-writer";
 
 	const lang = tIL[navigator.language == "de" ? "de" : "en"];
