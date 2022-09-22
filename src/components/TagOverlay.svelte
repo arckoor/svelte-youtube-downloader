@@ -21,7 +21,11 @@
 			available = links.length-1;
 			fromLink = true;
 			for (let i=0; i<Math.min(bufferSize, links.length); i++) {
-				dlNext(!i ? true : false);
+				if (!i) {
+					await dlNext(true)
+				} else {
+					dlNext();
+				}
 			}
 			while (!files.length) {
 				await new Promise(r => setTimeout(r, 100));
