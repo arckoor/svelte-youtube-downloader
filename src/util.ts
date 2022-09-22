@@ -33,7 +33,7 @@ export async function dl(url: String, format: String) {
 		// Create a new response out of the stream
 		.then((stream) => new Response(stream))
 		.then((res) => res.blob())
-		.catch((error) => console.log(error))
+		.catch((error) => error.message)
 }
 
 export async function getTitle(url: String) {
