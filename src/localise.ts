@@ -49,7 +49,9 @@ export const tIL = {
 		album: "Album",
 		genre: "Genre",
 		year: "Year",
-		track: "Track"
+		track: "Track",
+		tagTrackError: "Tracks must be in the format of 1 or 1/3",
+		tagYearError: "Year must be an integer number"
 	},
 	de: {
 		dropMP3: "Ziehe deine Cover-Datei hierher (png/jpg)",
@@ -61,7 +63,9 @@ export const tIL = {
 		album: "Album",
 		genre: "Genre",
 		year: "Jahr",
-		track: "Titelnummer"
+		track: "Titelnummer",
+		tagTrackError: "Titelnummer muss im Format 1 oder 1/3 sein",
+		tagYearError: "Jahr muss eine Ganzzahl sein"
 	}
 }
 

@@ -21,6 +21,7 @@
 	let fileHadCover = false;
 	let coverAvailable = false;
 	let tagsInavlid = false;
+	let errorMessage = "";
 
 	let tags = {
 		title: "",
@@ -97,14 +98,15 @@
 		const slashMatch = tags.track.match(/\//g);
 		if (tags.track.match(/[^\d\/\d]/) || (slashMatch && slashMatch.length > 1)) {
 				tagsInavlid = true;
-				console.log("nonononono");
+				errorMessage = lang.tagTrackError;
 				return;
 		}
 		if (tags.year.match(/[^\d]/)) {
 				tagsInavlid = true;
-				console.log("nonononono");
+				errorMessage = lang.tagYearError;
 				return;
 		}
+		errorMessage = "";
 	}
 
 	async function saveAndDl() {
@@ -277,6 +279,9 @@
 			{/if}
 		</button>
 	</div>
+	<div class="errorContainer">
+		<div class={errorMessage ? "errAnim" : ""}>{errorMessage}</div>
+	</div>
 
 </main>
 
@@ -383,5 +388,28 @@
 		width: 100%;
 		align-items: center;
 		justify-content: center;
+	}
+
+	.errorContainer {
+		margin-top: 4vh;
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.errAnim {
+		animation: errFade forwards 1s;
+	}
+
+	@keyframes errFade {
+		from {
+			opacity: 0;
+			margin-top: -5vh;
+		}
+		to {
+			margin-top: 0vh;
+			opacity: 1;
+		}
 	}
 </style>
