@@ -71,3 +71,13 @@ export async function getPlaylistItems(url: String) {
 	.then((json) => json.items)
 	.catch((error) => [error.message])
 }
+
+export function convertFileToBuffer(file: File) {
+	return new Promise<ArrayBuffer>((resolve) => {
+		const reader = new FileReader();
+		reader.onload = () => {
+			resolve(reader.result as ArrayBuffer);
+		}
+		reader.readAsArrayBuffer(file);
+	});
+}

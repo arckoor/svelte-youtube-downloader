@@ -1,8 +1,12 @@
 <script lang="ts">
 import { dl, getTitle, getPlaylistItems, dlToFile } from "@/util";
-import { iML } from "@/localise";
+import { iML, err } from "@/localise";
+import errors from "@/errors";
+import ID3Writer from "browser-id3-writer";
 
-const lang = iML[navigator.language == "de" ? "de" : "en"];
+const l = navigator.language == "de" ? "de" : "en"
+const lang = iML[l];
+const errLang = err[l]
 
 export let assignFiles: (f: File[]) => void;
 export let assignLinks: (l: String[]) => void;
@@ -10,7 +14,7 @@ export let assignLinks: (l: String[]) => void;
 let url = "";
 let format = "mp3";
 let fileInput: HTMLInputElement;
-let errorMessage = "";
+export let errorMessage = "";
 
 const formats = [
 	["mp3", lang.formats.mp3],
@@ -63,6 +67,10 @@ async function determineMethod(state: Boolean) {
 	let videos = [];
 	if (localURL.includes("playlist")) {
 		videos = await getPlaylistItems(url);
+		if (errors.includes(videos[0])) {
+			errorMessage = errLang[videos[0]+"//p"];
+			return;
+		}
 	} else {
 		videos = [url];
 	}
@@ -74,23 +82,27 @@ async function determineMethod(state: Boolean) {
 }
 
 async function directDownload(videos: string[]) {
-	const errors = ["dlErr//400", "dlErr//401", "dlErr//403", "dlErr//404", "dlErr//500", "Failed to fetch"]
 	if (!errors.includes(videos[0])) {
 		videos.forEach(async (value) => {
 			const title = await getTitle(value);
 			if (title && !errors.includes(title)) {
 				await dl(value, format)
+				.then(async (blob: Blob) => {
+					const writer = new ID3Writer(await blob.arrayBuffer());
+					writer.addTag();
+					return writer.getBlob();
+				})
 				.then((blob: Blob) =>  dlToFile(blob, title, format))
 				.catch((err) => console.error(err));
 			} else {
-				errorMessage = lang.errors[title];
+				errorMessage = errLang[title];
 			}
 		});
 		if (videos.length > 1) {
-			errorMessage = lang.errors["multipleFiles"];
+			errorMessage = errLang["multipleFiles"];
 		} 
 	} else {
-		errorMessage = lang.errors[videos[0]+"//p"];
+		errorMessage = errLang[videos[0]+"//p"];
 	}
 } 
 
@@ -119,6 +131,13 @@ async function directDownload(videos: string[]) {
 				disabled={url == ""}
 			>
 				{lang.fileDownload}
+			</button>
+			<button
+			class="border"
+			on:click={() => determineMethod(true)}
+			disabled={format != "mp3" || url == ""}
+			>
+				{lang.tagDownload}
 			</button>
 		</div>
 		<div class="errorContainer">
