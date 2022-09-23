@@ -83,24 +83,24 @@ async function determineMethod(state: Boolean) {
 
 async function directDownload(videos: string[]) {
 	if (!errors.includes(videos[0])) {
-		videos.forEach(async (value) => {
-			const title = await getTitle(value);
+		if (videos.length > 1) {
+			errorMessage = errLang["multipleFiles"];
+		} 
+		for (let i=0; i<videos.length; i++) {
+			const title = await getTitle(videos[i]);
 			if (title && !errors.includes(title)) {
-				await dl(value, format)
+				await dl(videos[i], format)
 				.then(async (blob: Blob) => {
 					const writer = new ID3Writer(await blob.arrayBuffer());
 					writer.addTag();
 					return writer.getBlob();
 				})
-				.then((blob: Blob) =>  dlToFile(blob, title, format))
+				.then((blob: Blob) => dlToFile(blob, title, format))
 				.catch((err) => console.error(err));
 			} else {
 				errorMessage = errLang[title];
 			}
-		});
-		if (videos.length > 1) {
-			errorMessage = errLang["multipleFiles"];
-		} 
+		}
 	} else {
 		errorMessage = errLang[videos[0]+"//p"];
 	}
