@@ -287,9 +287,7 @@
 
 <style scoped>
 	main {
-		margin: 25vh 0 0 10vw;
 		width: 80vw;
-		height: 75vh;
 		color: var(--tcol);
 	}
 

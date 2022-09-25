@@ -3,7 +3,7 @@ const serverURL = import.meta.env.DEV ? import.meta.env.VITE_LOCALHOST : import.
 const options = {
 	method: "GET",
 	headers: {
-		"arckoor-dl-api-key": import.meta.env.VITE_ARC_API_KEY
+		"arckoor-dl-api-key": import.meta.env.DEV ? import.meta.env.VITE_DEV_API_KEY :  import.meta.env.VITE_PROD_API_KEY
 	}
 }
 
