@@ -8,7 +8,7 @@
 	import ID3Writer from "browser-id3-writer";
 
 	const lang = tIL[navigator.language == "de" ? "de" : "en"];
-	const tagLang = [[lang.title, lang.artist], [lang.album, lang.genre], [lang.year, lang.track]]
+	const tagLang = [[lang.title, lang.artist], [lang.album, lang.genre], [lang.year, lang.track]];
 	export let file: File;
 	export let moreAvailable: Boolean;
 	export let triggerNext: Function;
@@ -113,7 +113,7 @@
 		checkTags();
 		if (tagsInavlid) return;
 
-		const buffer = await convertFileToBuffer(file)
+		const buffer = await convertFileToBuffer(file);
 		const writer = new ID3Writer(buffer);
 		writer
 			.setFrame("TIT2", tags.title) // title
@@ -121,7 +121,7 @@
 			.setFrame("TPE1", tags.artist.split(/[,\/]+/).map(s => s.trim())) // artists
 			.setFrame("TCON", tags.genre.split(/[,\/]+/).map(s => s.trim())) // genres
 			.setFrame("TYER", Number(tags.year)) // year
-			.setFrame("TRCK", tags.track) // track number 
+			.setFrame("TRCK", tags.track); // track number 
 		if (coverAvailable) {
 			const imageData = await imageToUint8Array(cf);
 			writer.setFrame("APIC", {
@@ -132,7 +132,7 @@
 			});
 		}
 		writer.addTag();
-		dlToFile(writer.getBlob(), tags.title || fileName, "mp3")
+		dlToFile(writer.getBlob(), tags.title || fileName, "mp3");
 		if (moreAvailable) triggerNext();
 	}
 
@@ -143,9 +143,9 @@
 			let t = item.type;
 			if (t === "image/png" || t === "image/jpeg") {
 				const image = await loadFile(item.getAsFile());
-				const buffer = new Uint8Array(image)
-				const imgURL = imageURL(buffer, t)
-				cf = await crop(imgURL, 1)
+				const buffer = new Uint8Array(image);
+				const imgURL = imageURL(buffer, t);
+				cf = await crop(imgURL, 1);
 				cfBuffer = cf;
 				coverAvailable = true;
 				if (usePresetCover) { usePresetCover = false; }
@@ -157,21 +157,21 @@
 
 	function loadFile(file: File) {
 		return new Promise<ArrayBuffer>((resolve, reject) => {
-			const reader = new FileReader()
+			const reader = new FileReader();
 			reader.onload = () => {
-				resolve(reader.result as ArrayBuffer)
+				resolve(reader.result as ArrayBuffer);
 			}
-			reader.onerror = reject
-			reader.readAsArrayBuffer(file)
+			reader.onerror = reject;
+			reader.readAsArrayBuffer(file);
 		})
 	}
 
 	function imageURL(bytes, format) {
-		let encoded = ''
+		let encoded = '';
 		bytes.forEach(function (byte) {
-			encoded += String.fromCharCode(byte)
+			encoded += String.fromCharCode(byte);
 		})
-		return `data:${format};base64,${window.btoa(encoded)}`
+		return `data:${format};base64,${window.btoa(encoded)}`;
 	}
 
 	// https://pqina.nl/blog/cropping-images-to-an-aspect-ratio-with-javascript/
@@ -218,7 +218,7 @@
 				canvas.height = inputImage.height;
 				const ctx = canvas.getContext("2d");
 				ctx.drawImage(inputImage, 0, 0);
-				const blob = await new Promise<Blob>((resolve) => ctx.canvas.toBlob(blob => resolve(blob)))
+				const blob = await new Promise<Blob>((resolve) => ctx.canvas.toBlob(blob => resolve(blob)));
 				resolve(new Uint8Array(await blob.arrayBuffer()));
 			}
 			inputImage.src = input;

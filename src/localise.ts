@@ -27,7 +27,7 @@ export const iML = {
 			"mp4": "MP4/Video",
 		}
 	}
-}
+};
 
 export const tOL = {
 	en: {
@@ -36,7 +36,7 @@ export const tOL = {
 	de: {
 		"fetching": "Laden der Audiodatei..."
 	}
-}
+};
 
 export const tIL = {
 	en: {
@@ -67,7 +67,7 @@ export const tIL = {
 		tagTrackError: "Titelnummer muss im Format 1 oder 1/3 sein",
 		tagYearError: "Jahr muss eine Ganzzahl sein"
 	}
-}
+};
 
 export const err = {
 	en: {
@@ -90,4 +90,4 @@ export const err = {
 		"Failed to fetch": "Verbindung zum Server konnte nicht hergestellt werden. Bitte versuche es später erneut.",
 		"multipleFiles": "Bitte lasse das Herunterladen von mehreren Dateien zu."
 	}
-}
+};

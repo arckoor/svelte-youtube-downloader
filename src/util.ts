@@ -1,11 +1,11 @@
-const serverURL = import.meta.env.DEV ? import.meta.env.VITE_LOCALHOST : import.meta.env.VITE_ONLINE_HOST
+const serverURL = import.meta.env.DEV ? import.meta.env.VITE_LOCALHOST : import.meta.env.VITE_ONLINE_HOST;
 
 const options = {
 	method: "GET",
 	headers: {
 		"arckoor-dl-api-key": import.meta.env.DEV ? import.meta.env.VITE_DEV_API_KEY :  import.meta.env.VITE_PROD_API_KEY
 	}
-}
+};
 
 export async function dl(url: String, format: String) {
 	return await fetch(`${serverURL}/download?url=${url}&format=${format}`, options)
@@ -33,7 +33,7 @@ export async function dl(url: String, format: String) {
 		// Create a new response out of the stream
 		.then((stream) => new Response(stream))
 		.then((res) => res.blob())
-		.catch((error) => error.message)
+		.catch((error) => error.message);
 }
 
 export async function getTitle(url: String) {
@@ -45,7 +45,7 @@ export async function getTitle(url: String) {
 		return res.json();
 	})
 	.then((json) => json.title)
-	.catch((error) => error.message)
+	.catch((error) => error.message);
 }
 
 export async function dlToFile(blob: Blob, title: String, format: String) {
@@ -69,7 +69,7 @@ export async function getPlaylistItems(url: String) {
 		return res.json();
 	})
 	.then((json) => json.items)
-	.catch((error) => [error.message])
+	.catch((error) => [error.message]);
 }
 
 export function convertFileToBuffer(file: File) {
