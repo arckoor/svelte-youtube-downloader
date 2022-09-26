@@ -120,8 +120,8 @@
 			.setFrame("TALB", tags.album) // album
 			.setFrame("TPE1", tags.artist.split(/[,\/]+/).map(s => s.trim())) // artists
 			.setFrame("TCON", tags.genre.split(/[,\/]+/).map(s => s.trim())) // genres
-			.setFrame("TYER", Number(tags.year)) // year
-			.setFrame("TRCK", tags.track); // track number 
+			.setFrame("TRCK", tags.track); // track number
+		if (tags.year) writer.setFrame("TYER", tags.year) // year
 		if (coverAvailable) {
 			const imageData = await imageToUint8Array(cf);
 			writer.setFrame("APIC", {
