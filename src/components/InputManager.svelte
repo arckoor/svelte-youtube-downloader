@@ -1,12 +1,11 @@
 <script lang="ts">
 import { dl, getTitle, getPlaylistItems, dlToFile } from "@/util";
-import { iML, err } from "@/localise";
+import { iML, err, language } from "@/localise";
 import errors from "@/errors";
 import ID3Writer from "browser-id3-writer";
 
-const l = navigator.language == "de" ? "de" : "en"
-const lang = iML[l];
-const errLang = err[l]
+const lang = iML[language];
+const errLang = err[language];
 
 export let assignFiles: (f: File[]) => void;
 export let assignLinks: (l: String[]) => void;
@@ -29,7 +28,7 @@ const assignURL = (event: Event) => url = (event.target as HTMLInputElement).val
 const assignFormat = (event: Event) => format = formats[(event.target as HTMLSelectElement).selectedIndex][0];
 
 function dropHandler(ev: DragEvent) {
-	const files = []
+	const files = [];
 	const items = ev.dataTransfer.items;
 	if (items) {
 		for (let i=0; i<items.length; i++) {
@@ -44,7 +43,7 @@ function dropHandler(ev: DragEvent) {
 }
 
 function inputHandler() {
-	const files = []
+	const files = [];
 	for (let i=0; i<fileInput.files.length; i++) {
 		if (fileInput.files[i].type === "audio/mpeg") {
 			files.push(fileInput.files[i]);
@@ -75,7 +74,7 @@ async function determineMethod(state: Boolean) {
 		videos = [url];
 	}
 	if (!state) {
-		await directDownload(videos)
+		await directDownload(videos);
 	} else {
 		assignLinks(videos);
 	}

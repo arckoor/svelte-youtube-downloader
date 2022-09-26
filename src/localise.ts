@@ -1,3 +1,5 @@
+export const language = ["de", "de-DE"].includes(navigator.language) ? "de" : "en";
+
 export const iML = {
 	en : {
 		urlPlaceholder: "Paste your YouTube URL here...",

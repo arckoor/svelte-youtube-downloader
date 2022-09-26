@@ -1,15 +1,15 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 	import { dl, getTitle } from "@/util";
-	import { tOL } from "@/localise";
+	import { tOL, language } from "@/localise";
 	import errors from "@/errors";
 	import TagInstance from "@/components/TagInstance.svelte";
 
-	export let files = []
-	export let links = []
+	export let files = [];
+	export let links = [];
 	export let throwOnError: Function;
 
-	const lang = tOL[navigator.language == "de" ? "de" : "en"];
+	const lang = tOL[language];
 
 	let fromLink = false;
 	let ready = false;
@@ -22,7 +22,7 @@
 			fromLink = true;
 			for (let i=0; i<Math.min(bufferSize, links.length); i++) {
 				if (!i) {
-					await dlNext(true)
+					await dlNext(true);
 				} else {
 					dlNext();
 				}
@@ -44,7 +44,7 @@
 	async function dlNext(first = false) {
 		const data = links.shift();
 		const title = await getTitle(data);
-		const audio = await dl(data, "mp3").then(async (blob: Blob) => new File([blob], title));
+		const audio = await dl(data, "mp3").then((blob: Blob) => new File([blob], title));
 		if (!errors.includes(title)) {
 			files.push(audio);
 		} else {
@@ -57,7 +57,7 @@
 
 	async function triggerNext() {
 		ready = false;
-		files.shift()
+		files.shift();
 		if (links.length > 0 && files.length < bufferSize) {
 			dlNext();
 		}

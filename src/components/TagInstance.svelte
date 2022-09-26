@@ -2,12 +2,12 @@
 	import { onMount } from "svelte";
 	import { parse } from "id3-parser";
 	import { dlToFile, convertFileToBuffer } from "@/util";
-	import { tIL } from "@/localise";
+	import { tIL, language } from "@/localise";
 	import coverData from "@/assets/cover.png?raw-hex";
 	import noCover from "@/assets/no-cover.png";
 	import ID3Writer from "browser-id3-writer";
 
-	const lang = tIL[navigator.language == "de" ? "de" : "en"];
+	const lang = tIL[language];
 	const tagLang = [[lang.title, lang.artist], [lang.album, lang.genre], [lang.year, lang.track]];
 	export let file: File;
 	export let moreAvailable: Boolean;
