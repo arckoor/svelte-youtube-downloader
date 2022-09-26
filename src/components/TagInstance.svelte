@@ -3,7 +3,7 @@
 	import { parse } from "id3-parser";
 	import { dlToFile, convertFileToBuffer } from "@/util";
 	import { tIL } from "@/localise";
-	import cover from "@/assets/cover";
+	import coverData from "@/assets/cover.png?raw-hex";
 	import noCover from "@/assets/no-cover.png";
 	import ID3Writer from "browser-id3-writer";
 
@@ -15,6 +15,7 @@
 	export let fromLink: Boolean;
 
 	let fileName = file.name;
+	let cover: string;
 	let cfBuffer: string;
 	let cf: string;
 	let usePresetCover = false;
@@ -63,6 +64,8 @@
 				co = true;
 			}
 		}
+		const cBuffer = Uint8Array.from(coverData.match(/.{1,2}/g).map(x => parseInt(x, 16)));
+		cover = imageURL(cBuffer, "image/png");
 		if (usePresetCover || co) {
 			usePresetCover = true;
 			cf = cover;
