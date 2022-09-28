@@ -41,6 +41,8 @@
 
 	onMount(async () => {
 		if (!fromLink) fileName = fileName.replace(/\.[^/.]+$/, "");
+		const cBuffer = Uint8Array.from(coverData.match(/.{1,2}/g).map(x => parseInt(x, 16)));
+		cover = imageURL(cBuffer, "image/png");
 		const buffer = new Uint8Array(await convertFileToBuffer(file));
 		const tag = parse(buffer);
 		if (tag) {
@@ -64,8 +66,6 @@
 				co = true;
 			}
 		}
-		const cBuffer = Uint8Array.from(coverData.match(/.{1,2}/g).map(x => parseInt(x, 16)));
-		cover = imageURL(cBuffer, "image/png");
 		if (usePresetCover || co) {
 			usePresetCover = true;
 			cf = cover;
