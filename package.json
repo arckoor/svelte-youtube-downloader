@@ -26,6 +26,6 @@
   },
   "dependencies": {
     "browser-id3-writer": "^4.4.0",
-    "id3-parser": "^2.0.0"
+    "mp3tag.js": "^3.3.2"
   }
 }

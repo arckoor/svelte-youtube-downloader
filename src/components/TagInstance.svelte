@@ -1,21 +1,22 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import { parse } from "id3-parser";
 	import { dlToFile, convertFileToBuffer } from "@/util";
 	import { tIL, language } from "@/localise";
 	import coverData from "@/assets/cover.png?raw-hex";
 	import noCover from "@/assets/no-cover.png";
 	import ID3Writer from "browser-id3-writer";
+	import MP3Tag from "mp3tag.js";
 
 	const lang = tIL[language];
 	const tagLang = [[lang.title, lang.artist], [lang.album, lang.genre], [lang.year, lang.track]];
+	const cover = Uint8ArrayToImage(Uint8Array.from(coverData.match(/.{1,2}/g).map((x: string) => parseInt(x, 16))), "image/png");
 	export let file: File;
 	export let moreAvailable: Boolean;
 	export let triggerNext: Function;
 	export let fromLink: Boolean;
 
+	let mp3tag: typeof MP3Tag;
 	let fileName = file.name;
-	let cover: string;
 	let cfBuffer: string;
 	let cf: string;
 	let usePresetCover = false;
@@ -41,38 +42,33 @@
 
 	onMount(async () => {
 		if (!fromLink) fileName = fileName.replace(/\.[^/.]+$/, "");
-		const cBuffer = Uint8Array.from(coverData.match(/.{1,2}/g).map(x => parseInt(x, 16)));
-		cover = imageURL(cBuffer, "image/png");
-		const buffer = new Uint8Array(await convertFileToBuffer(file));
-		const tag = parse(buffer);
-		if (tag) {
-			tags.title = tag.title || (fileName || "");
-			tags.artist = tag.artist || "";
-			tags.album = tag.album || "";
-			tags.genre = tag.genre || "";
-			tags.year = tag.year || "";
-			// @ts-ignore
-			tags.track = tag.track || "" ;
-			if (tag.image) {
-				cf = imageURL(tag.image.data, tag.image.mime);
-				fileHadCover = true;
-				return;
+
+		mp3tag = new MP3Tag(await fileToArrayBuffer(file));
+		mp3tag.read();
+		if (mp3tag) {
+			tags.title = mp3tag.title || (fileName || "");
+			tags.artist = mp3tag.artist || "";
+			tags.album = (mp3tag.album || "").replace(/\\\\/g, "/");
+			tags.genre = mp3tag.genre || "";
+			tags.year = mp3tag.year || "";
+			tags.track = mp3tag.track || "" ;
+			if (mp3tag.tags.v2) {
+				if (mp3tag.tags.v2.APIC &&  mp3tag.tags.v2.APIC.length > 0) {
+					const image = mp3tag.tags.v2.APIC[0]
+					cf = Uint8ArrayToImage(image.data, image.format);
+					coverAvailable = true;
+					fileHadCover = true;
+					return;
+				}
 			}
 		}
 		const cookie = decodeURIComponent(document.cookie);
-		let co = false;
 		if (cookie) {
 			if (cookie.includes("true")) {
-				co = true;
+				usePresetCover = true;
 			}
 		}
-		if (usePresetCover || co) {
-			usePresetCover = true;
-			cf = cover;
-			coverAvailable = true;
-		} else {
-			cf = noCover;
-		}
+		updateCover();
 	});
 
 	function updateCover() {
@@ -86,7 +82,6 @@
 			document.cookie = "usePresetCover=false;expires=never";
 			if (cfBuffer) {
 				cf = cfBuffer;
-				
 			} else {
 				cf = noCover;
 				coverAvailable = false;
@@ -145,9 +140,9 @@
 			let item = items[0];
 			let t = item.type;
 			if (t === "image/png" || t === "image/jpeg") {
-				const image = await loadFile(item.getAsFile());
+				const image = await fileToArrayBuffer(item.getAsFile());
 				const buffer = new Uint8Array(image);
-				const imgURL = imageURL(buffer, t);
+				const imgURL = Uint8ArrayToImage(buffer, t);
 				cf = await crop(imgURL, 1);
 				cfBuffer = cf;
 				coverAvailable = true;
@@ -158,23 +153,13 @@
 		}
 	}
 
-	function loadFile(file: File) {
+	function fileToArrayBuffer(file: File) {
 		return new Promise<ArrayBuffer>((resolve, reject) => {
 			const reader = new FileReader();
-			reader.onload = () => {
-				resolve(reader.result as ArrayBuffer);
-			}
+			reader.onload = () => resolve(reader.result as ArrayBuffer);
 			reader.onerror = reject;
 			reader.readAsArrayBuffer(file);
-		})
-	}
-
-	function imageURL(bytes, format) {
-		let encoded = '';
-		bytes.forEach(function (byte) {
-			encoded += String.fromCharCode(byte);
-		})
-		return `data:${format};base64,${window.btoa(encoded)}`;
+		});
 	}
 
 	// https://pqina.nl/blog/cropping-images-to-an-aspect-ratio-with-javascript/
@@ -184,9 +169,7 @@
 			inputImage.onload = () => {
 				const inputWidth = inputImage.naturalWidth;
 				const inputHeight = inputImage.naturalHeight;
-
 				const inputImageAspectRatio = inputWidth / inputHeight;
-
 				let outputWidth = inputWidth;
 				let outputHeight = inputHeight;
 				if (inputImageAspectRatio > aspectRatio) {
@@ -194,16 +177,12 @@
 				} else if (inputImageAspectRatio < aspectRatio) {
 					outputHeight = inputWidth / aspectRatio;
 				}
-
 				const outputX = (outputWidth - inputWidth) * 0.5;
 				const outputY = (outputHeight - inputHeight) * 0.5;
-
-				const outputImage = document.createElement('canvas');
-
+				const outputImage = document.createElement("canvas");
 				outputImage.width = outputWidth;
 				outputImage.height = outputHeight;
-
-				const ctx = outputImage.getContext('2d');
+				const ctx = outputImage.getContext("2d");
 				ctx.drawImage(inputImage, outputX, outputY);
 				resolve(outputImage.toDataURL());
 			}
@@ -228,6 +207,11 @@
 		});
 	}
 
+	function Uint8ArrayToImage(bytes: Uint8Array, format: string) {
+		let encoded = "";
+		bytes.forEach((byte) => encoded += String.fromCharCode(byte));
+		return `data:${format};base64,${window.btoa(encoded)}`;
+	}
 </script>
 
 <main>

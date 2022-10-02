@@ -5,17 +5,15 @@ import { readFileSync } from "fs";
 
 // https://stackoverflow.com/a/73849723/12203337
 const hexLoader = {
-    name: 'hex-loader',
+    name: "hex-loader",
     transform(_: any, id: string) {
-        const [path, query] = id.split('?');
-        if (query != 'raw-hex') {
+        const [path, query] = id.split("?");
+        if (query != "raw-hex") {
 			return null;
 		}
-
         const data = readFileSync(path);
-        const hex = data.toString('hex');
-
-        return `export default '${hex}';`;
+        const hex = data.toString("hex");
+        return `export default "${hex}";`;
     }
 };
 
