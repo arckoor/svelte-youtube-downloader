@@ -61,14 +61,12 @@
 		if (links.length > 0 && files.length < bufferSize) {
 			dlNext();
 		}
-		await new Promise(r => setTimeout(r, 100));
 		while (!files.length) {
 			await new Promise(r => setTimeout(r, 100));
 		}
 		available--;
-		ready = true;
+		setTimeout(() => ready = true, 0);
 	}
-
 </script>
 
 <main>
