@@ -28,7 +28,7 @@
 				}
 			}
 			while (!files.length) {
-				 await new Promise(r => setTimeout(r, 100));
+				await new Promise(r => setTimeout(r, 100));
 			}
 			if (files.length > 0) ready = true;
 		} else if (files.length > 0) {

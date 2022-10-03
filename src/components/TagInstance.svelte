@@ -92,7 +92,7 @@
 	async function checkTags() {
 		tagsInavlid = false;
 		const slashMatch = tags.track.match(/\//g);
-		if (tags.track.match(/[^\d\/\d]/) || (slashMatch && slashMatch.length > 1)) {
+		if (tags.track.match(/[^\d/\d]/) || (slashMatch && slashMatch.length > 1)) {
 			tagsInavlid = true;
 			errorMessage = lang.tagTrackError;
 			return;
@@ -114,8 +114,8 @@
 		writer
 			.setFrame("TIT2", tags.title) // title
 			.setFrame("TALB", tags.album) // album
-			.setFrame("TPE1", tags.artist.split(/[,\/]+/).map(s => s.trim())) // artists
-			.setFrame("TCON", tags.genre.split(/[,\/]+/).map(s => s.trim())) // genres
+			.setFrame("TPE1", tags.artist.split(/[,/]+/).map(s => s.trim())) // artists
+			.setFrame("TCON", tags.genre.split(/[,/]+/).map(s => s.trim())) // genres
 			.setFrame("TRCK", tags.track); // track number
 		if (tags.year) writer.setFrame("TYER", tags.year); // year
 		if (coverAvailable) {

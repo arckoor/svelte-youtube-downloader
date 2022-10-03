@@ -60,10 +60,7 @@ module.exports = {
 				"asyncArrow": "always"
 			}
 		],
-		"no-return-assign": [
-			"error",
-			"always"
-		],
+		"no-return-assign": "off",
 		"object-curly-spacing": [
 			"error",
 			"always"
