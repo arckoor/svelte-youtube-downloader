@@ -22,45 +22,37 @@
 			fromLink = true;
 			for (let i=0; i<Math.min(bufferSize, links.length); i++) {
 				if (!i) {
-					await dlNext(true);
+					await dlNext(true, true);
 				} else {
-					dlNext();
+					dlNext(true);
 				}
 			}
 			while (!files.length) {
-				await new Promise(r => setTimeout(r, 100));
+				 await new Promise(r => setTimeout(r, 100));
 			}
-			if (files.length > 0) {
-					ready = true;
-			}
-		} else {
-			if (files.length > 0) {
-					available = files.length-1;
-					ready = true;
-			}
+			if (files.length > 0) ready = true;
+		} else if (files.length > 0) {
+			available = files.length-1;
+			ready = true;
 		}
 	});
 
-	async function dlNext(first = false) {
+	async function dlNext(reduce = false, first = false) {
 		const data = links.shift();
 		const title = await getTitle(data);
 		const audio = await dl(data, "mp3").then((blob: Blob) => new File([blob], title));
-		if (!errors.includes(title)) {
+		if (!errors.includes(title))  {
 			files.push(audio);
-		} else {
-			if (first) {
-				throwOnError(title);
-			}
-			available--;
+		}  else {
+			if (first) throwOnError(title);
+			if (reduce) available--;
 		}
 	}
 
 	async function triggerNext() {
 		ready = false;
 		files.shift();
-		if (links.length > 0 && files.length < bufferSize) {
-			dlNext();
-		}
+		if (links.length > 0 && files.length < bufferSize) dlNext();
 		while (!files.length) {
 			await new Promise(r => setTimeout(r, 100));
 		}

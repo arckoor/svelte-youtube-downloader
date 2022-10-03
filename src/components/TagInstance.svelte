@@ -38,7 +38,7 @@
 	const assignCheckboxVal = () => {
 		usePresetCover = !usePresetCover;
 		updateCover();
-	}
+	};
 
 	onMount(async () => {
 		if (!fromLink) fileName = fileName.replace(/\.[^/.]+$/, "");
@@ -54,7 +54,7 @@
 			tags.track = mp3tag.track || "" ;
 			if (mp3tag.tags.v2) {
 				if (mp3tag.tags.v2.APIC &&  mp3tag.tags.v2.APIC.length > 0) {
-					const image = mp3tag.tags.v2.APIC[0]
+					const image = mp3tag.tags.v2.APIC[0];
 					cf = Uint8ArrayToImage(image.data, image.format);
 					coverAvailable = true;
 					fileHadCover = true;
@@ -74,9 +74,7 @@
 	function updateCover() {
 		if (usePresetCover) {
 			document.cookie = "usePresetCover=true;expires=never";
-			if (fileHadCover) {
-				cfBuffer = cf;
-			}
+			if (fileHadCover) cfBuffer = cf;
 			cf = cover;
 		} else {
 			document.cookie = "usePresetCover=false;expires=never";
@@ -95,14 +93,14 @@
 		tagsInavlid = false;
 		const slashMatch = tags.track.match(/\//g);
 		if (tags.track.match(/[^\d\/\d]/) || (slashMatch && slashMatch.length > 1)) {
-				tagsInavlid = true;
-				errorMessage = lang.tagTrackError;
-				return;
+			tagsInavlid = true;
+			errorMessage = lang.tagTrackError;
+			return;
 		}
 		if (tags.year.match(/[^\d]/)) {
-				tagsInavlid = true;
-				errorMessage = lang.tagYearError;
-				return;
+			tagsInavlid = true;
+			errorMessage = lang.tagYearError;
+			return;
 		}
 		errorMessage = "";
 	}
@@ -119,7 +117,7 @@
 			.setFrame("TPE1", tags.artist.split(/[,\/]+/).map(s => s.trim())) // artists
 			.setFrame("TCON", tags.genre.split(/[,\/]+/).map(s => s.trim())) // genres
 			.setFrame("TRCK", tags.track); // track number
-		if (tags.year) writer.setFrame("TYER", tags.year) // year
+		if (tags.year) writer.setFrame("TYER", tags.year); // year
 		if (coverAvailable) {
 			const imageData = await imageToUint8Array(cf);
 			writer.setFrame("APIC", {
@@ -146,7 +144,7 @@
 				cf = await crop(imgURL, 1);
 				cfBuffer = cf;
 				coverAvailable = true;
-				if (usePresetCover) { usePresetCover = false; }
+				if (usePresetCover) usePresetCover = false;
 			} else {
 				return;
 			}
@@ -185,7 +183,7 @@
 				const ctx = outputImage.getContext("2d");
 				ctx.drawImage(inputImage, outputX, outputY);
 				resolve(outputImage.toDataURL());
-			}
+			};
 			inputImage.src = url;
 		});
 	}
@@ -202,7 +200,7 @@
 				ctx.drawImage(inputImage, 0, 0);
 				const blob = await new Promise<Blob>((resolve) => ctx.canvas.toBlob(blob => resolve(blob)));
 				resolve(new Uint8Array(await blob.arrayBuffer()));
-			}
+			};
 			inputImage.src = input;
 		});
 	}

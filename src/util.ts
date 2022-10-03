@@ -28,7 +28,7 @@ export async function dl(url: String, format: String) {
 						});
 					}
 				}
-			})
+			});
 		})
 		// Create a new response out of the stream
 		.then((stream) => new Response(stream))
@@ -38,14 +38,14 @@ export async function dl(url: String, format: String) {
 
 export async function getTitle(url: String) {
 	return await fetch(`${serverURL}/title?url=${url}`, options)
-	.then((res) => {
-		if (!res.ok) {
-			throw new Error(`dlErr//${res.status}`);
-		}
-		return res.json();
-	})
-	.then((json) => json.title)
-	.catch((error) => error.message);
+		.then((res) => {
+			if (!res.ok) {
+				throw new Error(`dlErr//${res.status}`);
+			}
+			return res.json();
+		})
+		.then((json) => json.title)
+		.catch((error) => error.message);
 }
 
 export async function dlToFile(blob: Blob, title: String, format: String) {
@@ -62,14 +62,14 @@ export async function dlToFile(blob: Blob, title: String, format: String) {
 
 export async function getPlaylistItems(url: String) {
 	return await fetch(`${serverURL}/resolvePlaylist?url=${url}`, options)
-	.then((res) => {
-		if (!res.ok) {
-			throw new Error(`dlErr//${res.status}`);
-		}
-		return res.json();
-	})
-	.then((json) => json.items)
-	.catch((error) => [error.message]);
+		.then((res) => {
+			if (!res.ok) {
+				throw new Error(`dlErr//${res.status}`);
+			}
+			return res.json();
+		})
+		.then((json) => json.items)
+		.catch((error) => [error.message]);
 }
 
 export function convertFileToBuffer(file: File) {
@@ -77,7 +77,7 @@ export function convertFileToBuffer(file: File) {
 		const reader = new FileReader();
 		reader.onload = () => {
 			resolve(reader.result as ArrayBuffer);
-		}
+		};
 		reader.readAsArrayBuffer(file);
 	});
 }

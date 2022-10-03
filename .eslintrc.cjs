@@ -1,5 +1,6 @@
 // eslint-disable-next-line
 module.exports = {
+	parser: "@typescript-eslint/parser",
 	parserOptions: {
 		ecmaVersion: 2019,
 		sourceType: "module"
@@ -13,17 +14,21 @@ module.exports = {
 		"eslint:recommended"
 	],
 	plugins: [
-		"svelte3"
+		"svelte3",
+		"@typescript-eslint"
 	],
 	ignorePatterns: [
 		"dist/"
 	],
 	overrides: [
 		{
-			files: ["**/*.svelte"],
+			files: ["*.svelte"],
 			processor: "svelte3/svelte3"
 		}
 	],
+	settings: {
+		"svelte3/typescript": true
+	},
 	rules: {
 		"indent": [
 			"error",
@@ -65,7 +70,8 @@ module.exports = {
 		],
 		"curly": [
 			"error",
-			"all"
+			"multi-line",
+			"consistent"
 		],
 		"comma-spacing": [
 			"error"
