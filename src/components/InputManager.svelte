@@ -7,8 +7,10 @@
 	const lang = iML[language];
 	const errLang = err[language];
 
+	/* eslint-disable no-unused-vars */
 	export let assignFiles: (f: File[]) => void;
 	export let assignLinks: (l: String[]) => void;
+	/* eslint-enable no-unused-vars */
 
 	let url = "";
 	let format = "mp3";
@@ -81,8 +83,7 @@
 
 	async function directDownload(videos: string[]) {
 		if (!errors.includes(videos[0])) {
-			if (videos.length > 1)  errorMessage = errLang["multipleFiles"];
-
+			if (videos.length > 1) errorMessage = errLang["multipleFiles"];
 			for (let i=0; i<videos.length; i++) {
 				const title = await getTitle(videos[i]);
 				if (title && !errors.includes(title)) {
@@ -94,7 +95,7 @@
 						})
 						.then((blob: Blob) => dlToFile(blob, title, format))
 						.catch((err) => console.error(err));
-				} else  {
+				} else {
 					errorMessage = errLang[title];
 				}
 			}

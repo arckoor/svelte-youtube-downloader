@@ -53,7 +53,7 @@
 			tags.year = mp3tag.year || "";
 			tags.track = mp3tag.track || "" ;
 			if (mp3tag.tags.v2) {
-				if (mp3tag.tags.v2.APIC &&  mp3tag.tags.v2.APIC.length > 0) {
+				if (mp3tag.tags.v2.APIC && mp3tag.tags.v2.APIC.length > 0) {
 					const image = mp3tag.tags.v2.APIC[0];
 					cf = Uint8ArrayToImage(image.data, image.format);
 					coverAvailable = true;

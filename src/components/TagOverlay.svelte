@@ -41,9 +41,9 @@
 		const data = links.shift();
 		const title = await getTitle(data);
 		const audio = await dl(data, "mp3").then((blob: Blob) => new File([blob], title));
-		if (!errors.includes(title))  {
+		if (!errors.includes(title)) {
 			files.push(audio);
-		}  else {
+		} else {
 			if (first) throwOnError(title);
 			if (reduce) available--;
 		}

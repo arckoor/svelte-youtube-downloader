@@ -98,6 +98,16 @@ module.exports = {
 				"maxBOF": 0,
 				"maxEOF": 1
 			}
+		],
+		"no-multi-spaces": [
+			"error",
+			{
+				"exceptions" : {
+					"VariableDeclarator" : true,
+					"ImportDeclaration": true,
+					"Property": true
+				}
+			}
 		]
 	},
 };
