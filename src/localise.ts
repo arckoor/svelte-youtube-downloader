@@ -10,8 +10,6 @@ export const iML = {
 			"mp3": "MP3/audio",
 			"opus": "OPUS/audio",
 			"flac": "FLAC/audio",
-			"ogg": "OGG/audio",
-			"m4a": "M4A/audio",
 			"mp4": "MP4/video",
 		}
 	},
@@ -24,8 +22,6 @@ export const iML = {
 			"mp3": "MP3/Audio",
 			"opus": "OPUS/Audio",
 			"flac": "FLAC/Audio",
-			"ogg": "OGG/Audio",
-			"m4a": "M4A/Audio",
 			"mp4": "MP4/Video",
 		}
 	}

@@ -21,8 +21,6 @@
 		["mp3", lang.formats.mp3],
 		["opus", lang.formats.opus],
 		["flac", lang.formats.flac],
-		["ogg", lang.formats.ogg],
-		["m4a", lang.formats.m4a],
 		["mp4", lang.formats.mp4],
 	];
 
