@@ -89,9 +89,12 @@
 				if (title && !errors.includes(title)) {
 					await dl(videos[i], format)
 						.then(async (blob: Blob) => {
-							const writer = new ID3Writer(await blob.arrayBuffer());
-							writer.addTag();
-							return writer.getBlob();
+							if (format == "mp3") {
+								const writer = new ID3Writer(await blob.arrayBuffer());
+								writer.addTag();
+								return writer.getBlob();
+							}
+							return blob;
 						})
 						.then((blob: Blob) => dlToFile(blob, title, format))
 						.catch((err) => console.error(err));
