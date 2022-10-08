@@ -6,6 +6,8 @@ export const iML = {
 		fileDownload: "Download directly",
 		tagDownload: "Download and edit tags",
 		dropMP3: "Click or drop your MP3 files here",
+		downloading: "Downloading your files...",
+		done: "Done!",
 		formats: {
 			"mp3": "MP3/audio",
 			"opus": "OPUS/audio",
@@ -18,6 +20,8 @@ export const iML = {
 		fileDownload: "Direkt herunterladen",
 		tagDownload: "Herunterladen und editieren",
 		dropMP3: "Klicke oder ziehe deine MP3-Dateien hierher",
+		downloading: "Dateien herunterladen...",
+		done: "Fertig!",
 		formats: {
 			"mp3": "MP3/Audio",
 			"opus": "OPUS/Audio",
@@ -76,7 +80,6 @@ export const err = {
 		"dlErr//500": "An internal server error has occurred. Please try again later.",
 		"dlErr//404//p": "Unable to access this playlist.",
 		"Failed to fetch": "Could not connect to server. Please try again later.",
-		"multipleFiles": "Please permit the download of multiple files."
 	},
 	de : {
 		"dlErr//400": "Beim Herunterladen des Videos ist ein Fehler aufgestoßen. Bitte überprüfe die URL.",
@@ -86,6 +89,5 @@ export const err = {
 		"dlErr//500": "Ein Serverfehler ist aufgetreten. Bitte versuche es später erneut.",
 		"dlErr//404//p": "Auf diese Playlist kann nicht zugegriffen werden.",
 		"Failed to fetch": "Verbindung zum Server konnte nicht hergestellt werden. Bitte versuche es später erneut.",
-		"multipleFiles": "Bitte lasse das Herunterladen von mehreren Dateien zu."
 	}
 };

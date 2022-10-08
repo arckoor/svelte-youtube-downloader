@@ -16,6 +16,7 @@
 	let format = "mp3";
 	let fileInput: HTMLInputElement;
 	export let errorMessage = "";
+	let donwloading = false;
 
 	const formats = [
 		["mp3", lang.formats.mp3],
@@ -81,10 +82,11 @@
 
 	async function directDownload(videos: string[]) {
 		if (!errors.includes(videos[0])) {
-			if (videos.length > 1) errorMessage = errLang["multipleFiles"];
 			for (let i=0; i<videos.length; i++) {
 				const title = await getTitle(videos[i]);
 				if (title && !errors.includes(title)) {
+					donwloading = true;
+					errorMessage = lang.downloading;
 					await dl(videos[i], format)
 						.then(async (blob: Blob) => {
 							if (format == "mp3") {
@@ -94,7 +96,11 @@
 							}
 							return blob;
 						})
-						.then((blob: Blob) => dlToFile(blob, title, format))
+						.then((blob: Blob) => {
+							dlToFile(blob, title, format);
+							donwloading = false;
+							errorMessage = lang.done;
+						})
 						.catch((err) => console.error(err));
 				} else {
 					errorMessage = errLang[title];
@@ -140,7 +146,17 @@
 		</div>
 		<div class="errorContainer">
 			<div class={errorMessage ? "err errAnim" : "err"} style={errorMessage ? "" : "opacity: 0;"}>
+				{#if donwloading}
+					<div class="dlContainer">
+						<div class="spin-container">
+							<div class="spin"></div>
+							<div class="spin s"></div>
+						</div>
+						<div>{errorMessage}</div>
+					</div>
+				{:else}
 					{errorMessage}
+				{/if}
 			</div>
 		</div>
 	</div>
@@ -277,5 +293,56 @@
 		justify-content: center;
 		font-size: 55px;
 		transition: 0s;
+	}
+
+	.dlContainer {
+		display: flex;
+		justify-content: center;
+		margin-top: 10px;
+		align-items: center;
+	}
+
+	.spin-container {
+		text-align: center;
+		height: 25px;
+		margin-right: 20px;
+	}
+
+	.spin {
+		border: 2px solid var(--border);
+		width: 20px;
+		height: 20px;
+		margin: 0 auto;
+		border-radius: 50%;
+		border-right-color: transparent;
+		border-bottom-color: transparent;
+		animation: rotate 1s linear infinite;
+	}
+	.s {
+		border: 2px solid var(--tcol);
+		width: 25px;
+		height: 25px;
+		position: relative;
+		top: -26.6px;
+		border-top-color: transparent;
+		border-left-color: transparent;
+		animation: rotate2 1s linear infinite;
+		
+	}
+	@keyframes rotate {
+		0% {
+			transform: rotateZ(-360deg)
+		}
+		100% {
+			transform: rotateZ(0deg)
+		}
+	}
+	@keyframes rotate2 {
+		0% {
+			transform: rotateZ(360deg)
+		}
+		100% {
+			transform: rotateZ(0deg)
+		}
 	}
 </style>
