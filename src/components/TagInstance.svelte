@@ -112,12 +112,12 @@
 		const buffer = await convertFileToBuffer(file);
 		const writer = new ID3Writer(buffer);
 		writer
-			.setFrame("TIT2", tags.title) // title
-			.setFrame("TALB", tags.album) // album
+			.setFrame("TIT2", tags.title.trim()) // title
+			.setFrame("TALB", tags.album.trim()) // album
 			.setFrame("TPE1", tags.artist.split(/[,/]+/).map(s => s.trim())) // artists
 			.setFrame("TCON", tags.genre.split(/[,/]+/).map(s => s.trim())) // genres
-			.setFrame("TRCK", tags.track); // track number
-		if (tags.year) writer.setFrame("TYER", tags.year); // year
+			.setFrame("TRCK", tags.track.trim()); // track number
+		if (tags.year) writer.setFrame("TYER", tags.year.trim()); // year
 		if (coverAvailable) {
 			const imageData = await imageToUint8Array(cf);
 			writer.setFrame("APIC", {
