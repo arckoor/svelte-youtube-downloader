@@ -22,7 +22,7 @@
 	let usePresetCover = false;
 	let fileHadCover = false;
 	let coverAvailable = false;
-	let tagsInavlid = false;
+	let tagsInvalid = false;
 	let errorMessage = "";
 
 	let tags = {
@@ -46,12 +46,12 @@
 		mp3tag = new MP3Tag(await fileToArrayBuffer(file));
 		mp3tag.read();
 		if (mp3tag) {
-			tags.title = mp3tag.title || (fileName || "");
-			tags.artist = mp3tag.artist || "";
-			tags.album = (mp3tag.album || "").replace(/\\\\/g, "/");
-			tags.genre = mp3tag.genre || "";
-			tags.year = mp3tag.year || "";
-			tags.track = mp3tag.track || "" ;
+			tags.title = mp3tag.tags.title || (fileName || "");
+			tags.artist = mp3tag.tags.artist || "";
+			tags.album = (mp3tag.tags.album || "").replace(/\\\\/g, "/");
+			tags.genre = mp3tag.tags.genre || "";
+			tags.year = mp3tag.tags.year || "";
+			tags.track = mp3tag.tags.track || "" ;
 			if (mp3tag.tags.v2) {
 				if (mp3tag.tags.v2.APIC && mp3tag.tags.v2.APIC.length > 0) {
 					const image = mp3tag.tags.v2.APIC[0];
@@ -90,15 +90,15 @@
 	}
 
 	async function checkTags() {
-		tagsInavlid = false;
+		tagsInvalid = false;
 		const slashMatch = tags.track.match(/\//g);
 		if (tags.track.match(/[^\d/\d]/) || (slashMatch && slashMatch.length > 1)) {
-			tagsInavlid = true;
+			tagsInvalid = true;
 			errorMessage = lang.tagTrackError;
 			return;
 		}
 		if (tags.year.match(/[^\d]/)) {
-			tagsInavlid = true;
+			tagsInvalid = true;
 			errorMessage = lang.tagYearError;
 			return;
 		}
@@ -107,7 +107,7 @@
 
 	async function saveAndDl() {
 		checkTags();
-		if (tagsInavlid) return;
+		if (tagsInvalid) return;
 
 		const buffer = await convertFileToBuffer(file);
 		const writer = new ID3Writer(buffer);
@@ -128,7 +128,7 @@
 			});
 		}
 		writer.addTag();
-		dlToFile(writer.getBlob(), tags.title || fileName, "mp3");
+		dlToFile(writer.getBlob(), tags.title.trim() || fileName.trim(), "mp3");
 		if (moreAvailable) triggerNext();
 	}
 
