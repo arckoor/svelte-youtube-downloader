@@ -7,7 +7,8 @@ const options = {
 	}
 };
 
-export async function dl(url: String, format: String) {
+// eslint-disable-next-line no-unused-vars
+export async function dl(url: String, format: String, progress: (_: number) => void) {
 	return await fetch(`${serverURL}/download?url=${url}&format=${format}`, options)
 		.then((res) => {
 			// https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_readable_streams#reading_the_stream
@@ -24,6 +25,7 @@ export async function dl(url: String, format: String) {
 							}
 							// Enqueue the next data chunk into our target stream
 							controller.enqueue(value);
+							progress(value.length);
 							return pump();
 						});
 					}

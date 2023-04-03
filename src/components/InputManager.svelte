@@ -16,7 +16,8 @@
 	let format = "mp3";
 	let fileInput: HTMLInputElement;
 	export let errorMessage = "";
-	let donwloading = false;
+	let downloading = false;
+	let progress = 0;
 
 	const formats = [
 		["mp3", lang.formats.mp3],
@@ -85,9 +86,8 @@
 			for (let i=0; i<videos.length; i++) {
 				const title = await getTitle(videos[i]);
 				if (title && !errors.includes(title)) {
-					donwloading = true;
-					errorMessage = lang.downloading;
-					await dl(videos[i], format)
+					downloading = true;
+					await dl(videos[i], format, (e) => { progress += e; errorMessage = lang.downloading + `(${(progress/1000000).toFixed(2)} MB)`; })
 						.then(async (blob: Blob) => {
 							if (format == "mp3") {
 								const writer = new ID3Writer(await blob.arrayBuffer());
@@ -98,7 +98,7 @@
 						})
 						.then((blob: Blob) => {
 							dlToFile(blob, title, format);
-							donwloading = false;
+							downloading = false;
 							errorMessage = lang.done;
 						})
 						.catch((err) => console.error(err));
@@ -146,7 +146,7 @@
 		</div>
 		<div class="errorContainer">
 			<div class={errorMessage ? "err errAnim" : "err"} style={errorMessage ? "" : "opacity: 0;"}>
-				{#if donwloading}
+				{#if downloading}
 					<div class="dlContainer">
 						<div class="spin-container">
 							<div class="spin"></div>
@@ -160,6 +160,7 @@
 			</div>
 		</div>
 	</div>
+	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div
 		class="dz border"
 		on:click={handleClick}

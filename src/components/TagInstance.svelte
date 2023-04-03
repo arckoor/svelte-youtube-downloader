@@ -232,6 +232,7 @@
 	</table>
 
 	<div class="checkboxContainer">
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<div class={usePresetCover ? "checkbox checked border" : "checkbox border"} on:click={assignCheckboxVal}>
 			<input type="checkbox" value={usePresetCover}>
 		</div>
