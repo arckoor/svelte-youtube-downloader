@@ -87,6 +87,7 @@
 				const title = await getTitle(videos[i]);
 				if (title && !errors.includes(title)) {
 					downloading = true;
+					progress = 0;
 					await dl(videos[i], format, (e) => { progress += e; errorMessage = lang.downloading + `(${(progress/1000000).toFixed(2)} MB)`; })
 						.then(async (blob: Blob) => {
 							if (format == "mp3") {
